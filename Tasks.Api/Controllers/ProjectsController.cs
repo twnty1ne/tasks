@@ -23,16 +23,8 @@ namespace Tasks.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
         {
-            try
-            {
-                await _projectService.CreateProjectAsync(request);
-                return Ok();
-            }
-            catch (InvalidRequestException)
-            {
-                return BadRequest();
-            }
+            await _projectService.CreateProjectAsync(request);
+            return Ok();
         }
-
     }
 }

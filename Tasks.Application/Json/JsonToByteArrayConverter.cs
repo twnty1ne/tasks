@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Text;
+using Tasks.Application.Exceptions;
 
 namespace Tasks.Application.Json
 {
@@ -13,7 +14,7 @@ namespace Tasks.Application.Json
         {
             if (!reader.TryGetBytesFromBase64(out byte[]? result) || result == default)
             {
-                throw new Exception();
+                throw new InvalidRequestException();
             }
             return result;
         }

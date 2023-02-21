@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tasks.Api.Middlewares;
 using Tasks.Application.Requests;
 using Tasks.Application.Services;
 using Tasks.Application.Validators;
@@ -50,7 +51,7 @@ namespace Tasks.Api
 
             }
 
-
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

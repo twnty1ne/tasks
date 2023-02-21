@@ -26,46 +26,31 @@ namespace Tasks.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateTaskRequest request)
         {
-            try
-            {
-                await _taskService.CreateTaskAsync(request);
-                return Ok();
-            }
-            catch (InvalidRequestException)
-            {
-                return BadRequest();
-            }
+            await _taskService.CreateTaskAsync(request);
+            return Ok();
         }
 
         [HttpGet]
         public  IActionResult GetTasks([FromQuery] GetTasksRequest request)
         {
-            try
+            var tasks = _taskService.GetTasks(request);
+            var taskDtos = tasks.Select(x => new TaskDto
             {
-                var tasks = _taskService.GetTasks(request);
-                var taskDtos = tasks.Select(x => new TaskDto
+                Id = x.Id,
+                EndTime = x.EndDate,
+                StartTime = x.StartDate,
+                ProjectName = x.Project.Name,
+                Name = x.Name,
+                TimeSpent = x.CalculateSpentTime().ToString(@"hh\:mm"),
+                Comments = x.Comments.Select(x => new TaskCommentDto 
                 {
                     Id = x.Id,
-                    EndTime = x.EndDate,
-                    StartTime = x.StartDate,
-                    ProjectName = x.Project.Name,
-                    Name = x.Name,
-                    TimeSpent = x.CalculateSpentTime().ToString(@"hh\:mm"),
-                    Comments = x.Comments.Select(x => new TaskCommentDto 
-                    {
-                        Id = x.Id,
-                        Content = x.Content,
-                        CommentType = x.CommentType
-                    })
+                    Content = x.Content,
+                    CommentType = x.CommentType
+                })
 
-                });
-                return Ok(taskDtos);
-            }
-            catch (InvalidRequestException)
-            {
-                return BadRequest();
-            }
-
+            });
+            return Ok(taskDtos);
         }
 
         [HttpDelete("{id}/comments")]
