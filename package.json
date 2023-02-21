@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@coreui/coreui": "^4.2.6",
+    "@coreui/react": "^4.6.0",
+    "bootstrap": "^5.2.3",
+    "react-bootstrap-daterangepicker": "^8.0.0",
+    "rsuite": "^5.27.0"
+  }
+}
