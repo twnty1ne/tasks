@@ -6,6 +6,6 @@ namespace Tasks.Buisness
 {
     public abstract class Entity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; protected set; }
     }
 }

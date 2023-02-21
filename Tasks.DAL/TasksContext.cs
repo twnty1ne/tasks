@@ -33,24 +33,9 @@ namespace Tasks.DAL
                 .Entity<ProjectEntity>()
                 .HasData(new List<ProjectEntity>()
                 {
-                    new ProjectEntity
-                    {
-                        Id = new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"),
-                        Name = "Project1",
-                        CreateDate = DateTime.UtcNow
-                    },
-                    new ProjectEntity
-                    {
-                        Id = new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a"),
-                        Name = "Project2",
-                        CreateDate = DateTime.UtcNow,
-                    },
-                    new ProjectEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Project3",
-                        CreateDate = DateTime.UtcNow
-                    }
+                    new ProjectEntity(new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), "Project1"),
+                    new ProjectEntity(new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a"), "Project2"),
+                    new ProjectEntity("Project3")
                 });
 
             builder
@@ -73,32 +58,13 @@ namespace Tasks.DAL
                 .Entity<TaskEntity>()
                 .HasData(new List<TaskEntity>
                 {
-                    new TaskEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Project1Task1",
-                        ProjectId =  new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"),
-                        CreateDate = DateTime.UtcNow,
-                        StartDate = DateTime.UtcNow,
-                        EndDate = DateTime.UtcNow.AddHours(1),
+                    new TaskEntity(new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), 
+                        "Project1Task1", new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), DateTime.UtcNow, DateTime.UtcNow.AddHours(1), Encoding.ASCII.GetBytes("Task content")),
 
-                    },
-                    new TaskEntity
-                    {
-                        Id = new Guid("cd0be526-1342-4669-b540-cf079ece407d"),
-                        Name = "Project1Task2",
-                        ProjectId =  new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"),
-                        CreateDate = DateTime.UtcNow,
-                        StartDate = DateTime.UtcNow,
-                    },
+                    new TaskEntity(new Guid("cd0be526-1342-4669-b540-cf079ece407d"), 
+                        "Project1Task2", new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), DateTime.UtcNow, DateTime.UtcNow, Encoding.ASCII.GetBytes("Task content")),
 
-                    new TaskEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Project2Task1",
-                        CreateDate = DateTime.UtcNow,
-                        ProjectId = new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a")
-                    },
+                    new TaskEntity("Project2Task1", new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a"), null, null, Encoding.ASCII.GetBytes(string.Empty))
                 });
 
             builder
@@ -120,13 +86,7 @@ namespace Tasks.DAL
                 .Entity<TaskCommentEntity>()
                 .HasData(new List<TaskCommentEntity>
                 {
-                    new TaskCommentEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        CommentType = 5,
-                        TaskId = new Guid("cd0be526-1342-4669-b540-cf079ece407d"),
-                        Content = Encoding.ASCII.GetBytes("Task content")
-                    },
+                    new TaskCommentEntity(new Guid("cd0be526-1342-4669-b540-cf079ece407d"), 5, Encoding.ASCII.GetBytes("Task content"))
                 });
         }
     }

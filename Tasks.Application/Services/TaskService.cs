@@ -8,6 +8,8 @@ using Tasks.Application.Requests;
 using Tasks.Application.Validators;
 using Tasks.Buisness;
 using Tasks.DAL;
+using Tasks.Application.Dtos;
+using Tasks.Shared.Validation;
 
 namespace Tasks.Application.Services
 {
@@ -15,47 +17,25 @@ namespace Tasks.Application.Services
     {
         private readonly IRepository<TaskEntity> _taskRepository;
         private readonly IRepository<TaskCommentEntity> _taskCommentRepository;
-        private readonly IValidator<CreateTaskRequest> _createTaskRequestValidator;
+        private readonly IValidator<GetTasksRequest> _getTasksRequestValidator;
 
-        public TaskService(IRepository<TaskEntity> taskRepository, IRepository<TaskCommentEntity> taskCommentRepository, IValidator<CreateTaskRequest> createTaskRequestValidator)
+        public TaskService(IRepository<TaskEntity> taskRepository, IRepository<TaskCommentEntity> taskCommentRepository, IValidator<GetTasksRequest> getTasksRequestValidator)
         {
             _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
             _taskCommentRepository = taskCommentRepository ?? throw new ArgumentNullException(nameof(taskCommentRepository));
-            _createTaskRequestValidator = createTaskRequestValidator ?? throw new ArgumentNullException(nameof(createTaskRequestValidator));
+            _getTasksRequestValidator = getTasksRequestValidator ?? throw new ArgumentNullException(nameof(getTasksRequestValidator));
         }
 
         public async Task CreateCommentsAsync(CreateCommentsRequest request)
         {
-            var comments = request.Comments.Select(x => new TaskCommentEntity
-            {
-                Content = x.Content,
-                TaskId = request.TaskId,
-                CommentType = x.CommentType
-            });
+            var comments = request.Comments.Select(x => new TaskCommentEntity(request.TaskId, x.CommentType, x.Content));
             await _taskCommentRepository.AddRangeAsync(comments);
             await _taskCommentRepository.SaveChangesAsync();
         }
 
         public async Task CreateTaskAsync(CreateTaskRequest request)
         {
-            var valid = _createTaskRequestValidator.Valid(request);
-            if (!valid) throw new InvalidRequestException();
-            var task = new TaskEntity
-            {
-                Name = request.Name,
-                EndDate = request.EndDate,
-                StartDate = request.StartDate,
-                CreateDate = DateTime.UtcNow,
-                ProjectId = request.ProjectId,
-                Comments = new List<TaskCommentEntity> 
-                {
-                    new TaskCommentEntity 
-                    {
-                        Content = request.Description,
-                        CommentType = 1
-                    }
-                }
-            };
+            var task = new TaskEntity(request.Name, request.ProjectId, request.StartDate, request.EndDate, request.Description);
             await _taskRepository.AddAsync(task);
             await _taskRepository.SaveChangesAsync();
         }
@@ -67,9 +47,29 @@ namespace Tasks.Application.Services
             await _taskCommentRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<TaskEntity> GetTasks(GetTasksRequest getTasksRequest)
+        public IEnumerable<TaskDto> GetTasks(GetTasksRequest getTasksRequest)
         {
-            return _taskRepository.GetAll(x => x.ProjectId == getTasksRequest.ProjectId && x.CreateDate >= getTasksRequest.From && x.CreateDate <= getTasksRequest.To);
+            if (!_getTasksRequestValidator.Valid(getTasksRequest)) throw new InvalidRequestException();
+
+            var taskEntities = _taskRepository
+                .GetAll(x => x.ProjectId == getTasksRequest.ProjectId && x.CreateDate >= getTasksRequest.From && x.CreateDate <= getTasksRequest.To);
+
+            return taskEntities.Select(x => new TaskDto
+            {
+                Id = x.Id,
+                EndTime = x.EndDate,
+                StartTime = x.StartDate,
+                ProjectName = x.Project.Name,
+                Name = x.Name,
+                TimeSpent = x.CalculateSpentTime().ToString(@"hh\:mm"),
+                Comments = x.Comments.Select(x => new TaskCommentDto
+                {
+                    Id = x.Id,
+                    Content = x.Content,
+                    CommentType = x.CommentType
+                })
+
+            });
         }
     }
 }

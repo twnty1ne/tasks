@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Tasks.Application.Exceptions;
+using Tasks.Buisness.Exceptions;
 
 namespace Tasks.Api.Middlewares
 {
@@ -33,7 +34,11 @@ namespace Tasks.Api.Middlewares
             {
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
-            else 
+            else if (ex is InvalidBuisnessException) 
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            else
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }

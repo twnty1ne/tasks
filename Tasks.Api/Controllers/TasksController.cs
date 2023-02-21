@@ -34,23 +34,7 @@ namespace Tasks.Api.Controllers
         public  IActionResult GetTasks([FromQuery] GetTasksRequest request)
         {
             var tasks = _taskService.GetTasks(request);
-            var taskDtos = tasks.Select(x => new TaskDto
-            {
-                Id = x.Id,
-                EndTime = x.EndDate,
-                StartTime = x.StartDate,
-                ProjectName = x.Project.Name,
-                Name = x.Name,
-                TimeSpent = x.CalculateSpentTime().ToString(@"hh\:mm"),
-                Comments = x.Comments.Select(x => new TaskCommentDto 
-                {
-                    Id = x.Id,
-                    Content = x.Content,
-                    CommentType = x.CommentType
-                })
-
-            });
-            return Ok(taskDtos);
+            return Ok(tasks);
         }
 
         [HttpDelete("{id}/comments")]

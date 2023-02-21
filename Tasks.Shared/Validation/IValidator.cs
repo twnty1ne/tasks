@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tasks.Application.Validators
+namespace Tasks.Shared.Validation
 {
     public interface IValidator<T>
     {

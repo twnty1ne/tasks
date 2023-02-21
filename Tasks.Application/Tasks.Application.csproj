@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Tasks.Buisness\Tasks.Buisness.csproj" />
     <ProjectReference Include="..\Tasks.DAL\Tasks.DAL.csproj" />
+    <ProjectReference Include="..\Tasks.Shared\Tasks.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tasks.Application.Requests;
+using Tasks.Shared.Validation;
 
-namespace Tasks.Application.Validators
+namespace Tasks.Buisness.Validators
 {
-    public class CreateTaskRequestValidator : IValidator<CreateTaskRequest>
+    public class TaskValidator : IValidator<TaskEntity>
     {
-        public bool Valid(CreateTaskRequest item)
+        public bool Valid(TaskEntity item)
         {
             return item != null 
                 && !string.IsNullOrWhiteSpace(item.Name) 
@@ -15,12 +13,12 @@ namespace Tasks.Application.Validators
                 && (EndDateStartDateBothNull(item) || item.EndDate is null || StartDateLessOrEqualsToEndDate(item));
         }
 
-        private bool EndDateStartDateBothNull(CreateTaskRequest item) 
+        private bool EndDateStartDateBothNull(TaskEntity item) 
         {
             return item.EndDate is null && item.StartDate is null;
         }
 
-        private bool StartDateLessOrEqualsToEndDate(CreateTaskRequest item) 
+        private bool StartDateLessOrEqualsToEndDate(TaskEntity item) 
         {
             return item.StartDate <= item.EndDate;
         }

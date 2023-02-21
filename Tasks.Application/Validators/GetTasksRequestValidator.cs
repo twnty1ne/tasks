@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tasks.Application.Requests;
+﻿using Tasks.Application.Requests;
+using Tasks.Shared.Validation;
 
 namespace Tasks.Application.Validators
 {

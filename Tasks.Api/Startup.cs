@@ -9,6 +9,7 @@ using Tasks.Application.Services;
 using Tasks.Application.Validators;
 using Tasks.Buisness;
 using Tasks.DAL;
+using Tasks.Shared.Validation;
 
 namespace Tasks.Api
 {
@@ -32,8 +33,7 @@ namespace Tasks.Api
             services.AddTransient<IRepository<ProjectEntity>, ProjectRepository>();
             services.AddTransient<IRepository<TaskEntity>, TaskRepository>();
             services.AddTransient<IRepository<TaskCommentEntity>, TaskCommentRepository>();
-            services.AddTransient<IValidator<CreateProjectRequest>, CreateProjectRequestValidator>();
-            services.AddTransient<IValidator<CreateTaskRequest>, CreateTaskRequestValidator>();
+            services.AddTransient<IValidator<GetTasksRequest>, GetTasksRequestValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
