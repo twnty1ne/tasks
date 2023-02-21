@@ -35,7 +35,7 @@ namespace Tasks.DAL
                 {
                     new ProjectEntity(new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), "Project1"),
                     new ProjectEntity(new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a"), "Project2"),
-                    new ProjectEntity("Project3")
+                    new ProjectEntity(Guid.NewGuid(), "Project3")
                 });
 
             builder
@@ -59,12 +59,12 @@ namespace Tasks.DAL
                 .HasData(new List<TaskEntity>
                 {
                     new TaskEntity(new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), 
-                        "Project1Task1", new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), DateTime.UtcNow, DateTime.UtcNow.AddHours(1), Encoding.ASCII.GetBytes("Task content")),
+                        "Project1Task1", new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), DateTime.UtcNow, DateTime.UtcNow.AddHours(1)),
 
                     new TaskEntity(new Guid("cd0be526-1342-4669-b540-cf079ece407d"), 
-                        "Project1Task2", new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), DateTime.UtcNow, DateTime.UtcNow, Encoding.ASCII.GetBytes("Task content")),
+                        "Project1Task2", new Guid("7e4e30ed-cd5d-454f-b236-49e5263b1765"), DateTime.UtcNow, DateTime.UtcNow),
 
-                    new TaskEntity("Project2Task1", new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a"), null, null, Encoding.ASCII.GetBytes(string.Empty))
+                    new TaskEntity(Guid.NewGuid(), "Project2Task1", new Guid("ca4f2d5d-ea74-47b9-8485-ec387ef6620a"), null, null)
                 });
 
             builder
@@ -86,7 +86,7 @@ namespace Tasks.DAL
                 .Entity<TaskCommentEntity>()
                 .HasData(new List<TaskCommentEntity>
                 {
-                    new TaskCommentEntity(new Guid("cd0be526-1342-4669-b540-cf079ece407d"), 5, Encoding.ASCII.GetBytes("Task content"))
+                    new TaskCommentEntity(Guid.NewGuid(), new Guid("cd0be526-1342-4669-b540-cf079ece407d"), 5, Encoding.ASCII.GetBytes("Task content"))
                 });
         }
     }

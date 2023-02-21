@@ -12,17 +12,20 @@ namespace Tasks.Buisness
         {
         }
 
-        public TaskCommentEntity(Guid taskId, byte commentType, byte[] content)
+        public TaskCommentEntity(Guid taskId, byte commentType, byte[] content) : this(commentType, content)
         {
             TaskId = taskId;
-            CommentType = commentType;
-            Content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
         public TaskCommentEntity(byte commentType, byte[] content)
         {
             CommentType = commentType;
             Content = content ?? throw new ArgumentNullException(nameof(content));
+        }
+
+        public TaskCommentEntity(Guid id, Guid taskId, byte commentType, byte[] content) : this(taskId, commentType, content)
+        {
+            Id = id;
         }
 
         public Guid TaskId { get; protected set; }
