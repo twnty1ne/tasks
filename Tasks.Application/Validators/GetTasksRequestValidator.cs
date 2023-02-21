@@ -7,7 +7,7 @@ namespace Tasks.Application.Validators
     {
         public bool Valid(GetTasksRequest item)
         {
-            return item != null && item.To <= item.From;
+            return item != null && item.To >= item.From;
         }
     }
 }
