@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +9,11 @@ namespace Tasks.DAL
 {
     public class TasksDbConext : DbContext
     {
-        public TasksDbConext()
+        private readonly IConfiguration _configuration;
+
+        public TasksDbConext(IConfiguration configuration)
         {
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public DbSet<TaskEntity> Tasks { get; set; }
@@ -19,7 +23,7 @@ namespace Tasks.DAL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer(@"Server=DESKTOP-HFEPFQ9\SQLEXPRESS;Database=Task;Trusted_Connection=True")
+                .UseSqlServer(_configuration.GetConnectionString("DefaultConnection"))
                 .UseLazyLoadingProxies();
         }
 
